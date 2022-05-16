@@ -2,9 +2,12 @@ package com.letscode.supermarket;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
-public class Produto {
+public class Produto implements TablePrintable{
+
     private final TipoProduto tipo;
     private final String marca;
     private final String id;
@@ -74,6 +77,19 @@ public class Produto {
         this.estoque = estoque;
     }
 
+    //TODO para fins de debug, apagar depois
+    public Produto(TipoProduto tipo, String marca, String id, String nome, BigDecimal precoCusto, int quantidade, LocalDateTime dataCompra, BigDecimal precoVenda, int estoque) {
+        this.tipo = tipo;
+        this.marca = marca;
+        this.id = id;
+        this.nome = nome;
+        this.precoCusto = precoCusto;
+        this.quantidade = quantidade;
+        this.dataCompra = dataCompra;
+        this.precoVenda = precoVenda;
+        this.estoque = estoque;
+    }
+
     public Produto() {
         this.tipo = recebeTipo();
         System.out.println("Marca:");
@@ -102,6 +118,43 @@ public class Produto {
                 ", precoVenda=" + precoVenda +
                 ", estoque=" + estoque +
                 '}';
+    }
+    public String toTable(List<String> atributos, String tableFormat){
+        String linha = "";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        for(String atributo :  atributos) {
+            switch (atributo){
+                case "TIPO":
+                    linha += String.format(tableFormat, this.tipo);
+                    break;
+                case "MARCA":
+                    linha += String.format(tableFormat, this.marca);
+                    break;
+                case "ID":
+                    linha += String.format(tableFormat, this.id);
+                    break;
+                case "NOME":
+                    linha += String.format(tableFormat, this.nome);
+                    break;
+                case "PRECO_CUSTO":
+                    linha += String.format(tableFormat, this.precoCusto);
+                    break;
+                case "QTD":
+                    linha += String.format(tableFormat, this.quantidade);
+                    break;
+                case "DATA_COMPRA":
+                    linha += String.format(tableFormat, formatter.format(this.dataCompra));
+                    break;
+                case "PRECO_VENDA":
+                    linha += String.format(tableFormat, this.precoVenda);
+                    break;
+                case "ESTOQUE":
+                    linha += String.format(tableFormat, this.estoque);
+                    break;
+            }
+        }
+        linha += "|";
+        return linha;
     }
 
     private int recebeQuantidade() {

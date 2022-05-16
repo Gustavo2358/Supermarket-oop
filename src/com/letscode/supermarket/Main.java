@@ -7,6 +7,11 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         Estoque estoque = new Estoque();
 
+        //TODO dodos fake, apagar depois
+        estoque.estoque.add(MockData.nescau);
+        estoque.estoque.add(MockData.donPerrengue);
+        estoque.estoque.add(MockData.softButt);
+
         boolean finalizar;
         do{
             finalizar = menu(sc, estoque);

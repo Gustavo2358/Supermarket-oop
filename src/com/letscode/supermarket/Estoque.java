@@ -1,10 +1,13 @@
 package com.letscode.supermarket;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Estoque {
 
     ArrayList<Produto> estoque = new ArrayList<>();
+
 
     public void cadastrarComprar() {
         //cadastrar o produto no estoque caso o estoque estiver vazio.
@@ -31,6 +34,18 @@ public class Estoque {
     }
 
     public void imprimeEstoque(){
-        estoque.forEach(a -> System.out.println(a.toString()));
+        List<String> tableLabels = Arrays.asList("TIPO","MARCA","IDENTIFICADOR","NOME","PREÇO DE CUSTO","QTD ULTIMA COMPRA","DATA DA COMPRA",
+                "PREÇO DE VENDA", "ESTOQUE");
+        List<String> atributos = List.of(AtributosProduto.TIPO.toString(),
+                AtributosProduto.MARCA.toString(),
+                AtributosProduto.ID.toString(),
+                AtributosProduto.NOME.toString(),
+                AtributosProduto.PRECO_CUSTO.toString(),
+                AtributosProduto.QTD.toString(),
+                AtributosProduto.DATA_COMPRA.toString(),
+                AtributosProduto.PRECO_VENDA.toString(),
+                AtributosProduto.ESTOQUE.toString()
+        );
+        SupermarketUtils.imprimirTabela(tableLabels, this.estoque, atributos);
     }
 }
