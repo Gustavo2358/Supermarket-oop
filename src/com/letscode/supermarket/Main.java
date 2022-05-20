@@ -1,6 +1,8 @@
 package com.letscode.supermarket;
 
+import java.util.Locale;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,9 +10,9 @@ public class Main {
         Estoque estoque = new Estoque();
 
         //TODO dodos fake, apagar depois
-        estoque.estoque.add(MockData.nescau);
-        estoque.estoque.add(MockData.donPerrengue);
-        estoque.estoque.add(MockData.softButt);
+        estoque.getEstoque().add(MockData.nescau);
+        estoque.getEstoque().add(MockData.donPerrengue);
+        estoque.getEstoque().add(MockData.softButt);
 
         boolean finalizar;
         do{
@@ -44,28 +46,21 @@ public class Main {
             }
         }while(opcao < 1 || opcao > opcaoMaxima);
 
-
         switch (opcao) {
             case 1:
                 estoque.cadastrarComprar();
                 break;
             case 2:
-                estoque.imprimeEstoque();
+                imprimeEstoque(estoque, sc);
                 break;
             case 3:
-//                System.out.println("Digite o tipo: (ALIMENTOS - BEBIDA - HIGIENE)");
-//                TipoProduto tipo = recebeTipoProduto(sc);
-//                imprimirEstoque(tipo, null, null);
+                getProdutoPeloTipo(estoque, sc);
                 break;
             case 4:
-//                System.out.println("Digite o código:");
-//                String id = sc.nextLine();
-//                imprimirEstoque(null, id, null);
+                getProdutoPeloCodigo(sc, estoque);
                 break;
             case 5:
-//                System.out.println("Digite o nome ou parte dele: ");
-//                String nome = sc.nextLine();
-//                imprimirEstoque(null,null,nome);
+                getProdutoPeloNome(sc, estoque);
                 break;
             case 6:
 //                venda(sc);
@@ -80,6 +75,59 @@ public class Main {
                 return true;
         }
         return false;
+    }
+
+    private static void getProdutoPeloNome(Scanner sc, Estoque estoque) {
+        Stream<Produto> produtoStream;
+        System.out.println("Digite o nome:");
+        String nome = sc.nextLine().toUpperCase(Locale.ROOT);
+        if (estoque.getEstoque().stream().noneMatch(e -> e.getNome().toUpperCase(Locale.ROOT).contains(nome.toUpperCase(Locale.ROOT)))){
+            System.out.println("Produto não encontrado.");
+            System.out.println("Aperte qualquer tecla para retornar ao menu principal.");
+            sc.nextLine();
+        }else {
+            produtoStream = estoque.getEstoque().stream()
+                    .filter(e -> e.getNome().toUpperCase(Locale.ROOT).contains(nome.toUpperCase(Locale.ROOT)));
+            estoque.imprimeEstoque(produtoStream);
+        }
+        System.out.println("Pressione enter para voltar ao menu principal.");
+        sc.nextLine();
+    }
+
+    private static void getProdutoPeloCodigo(Scanner sc, Estoque estoque) {
+        Stream<Produto> produtoStream;
+        System.out.println("Digite o código:");
+        String id = sc.nextLine();
+        if (estoque.getEstoque().stream().noneMatch(e -> e.getId().equals(id))){
+            System.out.println("Produto não encontrado.");
+            System.out.println("Pressione enter para voltar ao menu principal.");
+            sc.nextLine();
+        }else {
+            produtoStream = estoque.getEstoque().stream()
+                    .filter(e -> e.getId().equals(id));
+            estoque.imprimeEstoque(produtoStream);
+        }
+        System.out.println("Pressione enter para voltar ao menu principal.");
+        sc.nextLine();
+    }
+
+    private static void imprimeEstoque(Estoque estoque, Scanner sc) {
+        Stream<Produto> produtoStream;
+        produtoStream = estoque.getEstoque().stream();
+        estoque.imprimeEstoque(produtoStream);
+        System.out.println("Pressione enter para voltar ao menu principal.");
+        sc.nextLine();
+    }
+
+    private static void getProdutoPeloTipo(Estoque estoque, Scanner sc) {
+        Stream<Produto> produtoStream;
+        System.out.println("Digite o tipo desejado: (ALIMENTOS - BEBIDA - HIGIENE)");
+        TipoProduto tipo = SupermarketUtils.recebeTipoProduto();
+        produtoStream = estoque.getEstoque().stream()
+                .filter(e -> e.getTipo() == tipo);
+        estoque.imprimeEstoque(produtoStream);
+        System.out.println("Pressione enter para voltar ao menu principal.");
+        sc.nextLine();
     }
 
 }

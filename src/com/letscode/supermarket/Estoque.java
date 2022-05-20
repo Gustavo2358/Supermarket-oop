@@ -3,22 +3,23 @@ package com.letscode.supermarket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Estoque {
 
-    ArrayList<Produto> estoque = new ArrayList<>();
+    private final ArrayList<Produto> estoque = new ArrayList<>();
 
 
     public void cadastrarComprar() {
         //cadastrar o produto no estoque caso o estoque estiver vazio.
         Produto produtoNovo = new Produto();
-        if(estoque.size() == 0){
-            estoque.add(produtoNovo);
+        if(getEstoque().size() == 0){
+            getEstoque().add(produtoNovo);
             return;
         }
 
         //se o produdo já existe no estoque, "setar" os novos valores da compra.
-        for(Produto produtoEstoque : estoque){
+        for(Produto produtoEstoque : getEstoque()){
             if (produtoNovo.getId().equals(produtoEstoque.getId())){
                 produtoEstoque.setPrecoCusto(produtoNovo.getPrecoCusto());
                 produtoEstoque.setQuantidade(produtoNovo.getQuantidade());
@@ -30,10 +31,10 @@ public class Estoque {
         }
 
         //caso o produto não exista no estoque, cadastrar novo produto.
-        estoque.add(produtoNovo);
+        getEstoque().add(produtoNovo);
     }
 
-    public void imprimeEstoque(){
+    public void imprimeEstoque(Stream<Produto> produtoStream){
         List<String> tableLabels = Arrays.asList("TIPO","MARCA","IDENTIFICADOR","NOME","PREÇO DE CUSTO","QTD ULTIMA COMPRA","DATA DA COMPRA",
                 "PREÇO DE VENDA", "ESTOQUE");
         List<String> atributos = List.of(AtributosProduto.TIPO.toString(),
@@ -46,6 +47,13 @@ public class Estoque {
                 AtributosProduto.PRECO_VENDA.toString(),
                 AtributosProduto.ESTOQUE.toString()
         );
-        SupermarketUtils.imprimirTabela(tableLabels, this.estoque, atributos);
+
+
+        SupermarketUtils.imprimirTabela(tableLabels, produtoStream, atributos);
     }
+
+    public ArrayList<Produto> getEstoque() {
+        return estoque;
+    }
+
 }

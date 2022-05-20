@@ -105,56 +105,45 @@ public class Produto implements TablePrintable{
         this.estoque = this.quantidade;
     }
 
-    @Override
-    public String toString() {
-        return "Produto{" +
-                "tipo=" + tipo +
-                ", marca='" + marca + '\'' +
-                ", id='" + id + '\'' +
-                ", nome='" + nome + '\'' +
-                ", precoCusto=" + precoCusto +
-                ", quantidade=" + quantidade +
-                ", dataCompra=" + dataCompra +
-                ", precoVenda=" + precoVenda +
-                ", estoque=" + estoque +
-                '}';
-    }
+
     public String toTable(List<String> atributos, String tableFormat){
-        String linha = "";
+        StringBuilder linha = new StringBuilder();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         for(String atributo :  atributos) {
             switch (atributo){
                 case "TIPO":
-                    linha += String.format(tableFormat, this.tipo);
+                    linha.append(String.format(tableFormat, this.tipo));
                     break;
                 case "MARCA":
-                    linha += String.format(tableFormat, this.marca);
+                    linha.append(String.format(tableFormat, this.marca));
                     break;
                 case "ID":
-                    linha += String.format(tableFormat, this.id);
+                    linha.append(String.format(tableFormat, this.id));
                     break;
                 case "NOME":
-                    linha += String.format(tableFormat, this.nome);
+                    linha.append(String.format(tableFormat, this.nome));
                     break;
                 case "PRECO_CUSTO":
-                    linha += String.format(tableFormat, this.precoCusto);
+                    linha.append(String.format(tableFormat, this.precoCusto));
                     break;
                 case "QTD":
-                    linha += String.format(tableFormat, this.quantidade);
+                    linha.append(String.format(tableFormat, this.quantidade));
                     break;
                 case "DATA_COMPRA":
-                    linha += String.format(tableFormat, formatter.format(this.dataCompra));
+                    linha.append(String.format(tableFormat, formatter.format(this.dataCompra)));
                     break;
                 case "PRECO_VENDA":
-                    linha += String.format(tableFormat, this.precoVenda);
+                    linha.append(String.format(tableFormat, this.precoVenda));
                     break;
                 case "ESTOQUE":
-                    linha += String.format(tableFormat, this.estoque);
+                    linha.append(String.format(tableFormat, this.estoque));
                     break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + atributo);
             }
         }
-        linha += "|";
-        return linha;
+        linha.append("|");
+        return linha.toString();
     }
 
     private int recebeQuantidade() {
